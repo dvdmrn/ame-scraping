@@ -6,6 +6,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import time
+import os
 
 
 chrome_options = webdriver.ChromeOptions()
@@ -19,10 +20,10 @@ OUTPUT_FOLDER = "scraped-teams" # name of output folder
 
 
 # min/max values of user pages to scrape. Min is inclusive and max is exclusive. So if your range was [0-4) it would provide values 0,1,2,3,4
-_MIN_INDEX = 151 # inclusive
-_MAX_INDEX = 190 # exclusive
+_MIN_INDEX = 226 # inclusive
+_MAX_INDEX = 243 # exclusive
 
-_LOGIN_URL = "http://www.example.com" 
+_LOGIN_URL = os.environ["AME_LOGIN"] # access an environment variable with login credentials 
 
 driver = webdriver.Chrome(chrome_options=chrome_options)
 
