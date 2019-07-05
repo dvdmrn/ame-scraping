@@ -3,7 +3,6 @@ from bs4 import BeautifulSoup
 from os import listdir
 from os.path import isfile, join
 import csv
-import helpers
 
 
 _RAW_PATH = "scraped-teams"
