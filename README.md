@@ -1,17 +1,21 @@
 # ame-scraping
 
+## how to use: 
+1. edit settings.json with the parameters of the pages you want to scrape
+2. run by calling `python main.py()`
+
 ### script flow
 
 ```
-scrape-admin.py -> populates scraped-profiles/ with .html docs
+ScrapeProfiles.py -> populates scraped-profiles/ with .html docs
  |
-parse-sites.py -> generates user_data.csv
+ParseProfiles.py -> generates user_data.csv
  |
-scrape-teams.py -> populates scraped-teams/ with .html docs
+ScrapeTeams.py -> populates scraped-teams/ with .html docs
  |
-parse-teams.py -> generates team_data.csv
+ParseTeams.py -> generates team_data.csv
  |
-player-team-matching.py -> generates teamXuser-consent.csv
+PlayerTeamMatching.py -> generates teamXuser-consent.csv
 
 ```
 

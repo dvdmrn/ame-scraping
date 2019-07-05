@@ -52,7 +52,7 @@ def makeList():
 		file.close()
 
 def writeCSV():
-	print("writing to user_data.csv...")
+	print("\n\n✏️ writing to user_data.csv...\n\n")
 	with open("user_data.csv","w",newline='') as csvFile:
 		writer = csv.DictWriter(csvFile, fieldnames=headers)
 		writer.writeheader()
@@ -63,4 +63,3 @@ def main():
 	makeList()
 	writeCSV()
 
-main()

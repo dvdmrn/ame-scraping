@@ -49,7 +49,7 @@ def getOptinIDs(names,nmap):
 	return optinIDs
 
 def writeCSV(toWrite):
-	print("writing to team_data.csv...")
+	print("\n\n✏️ writing to team_data.csv...\n\n")
 	with open("team_data.csv","w",newline='') as csvFile:
 		writer = csv.DictWriter(csvFile, fieldnames=_HEADERS)
 		writer.writeheader()
@@ -62,6 +62,7 @@ def main():
 	
 	files = [f for f in listdir(_RAW_PATH) if isfile(join(_RAW_PATH, f))]
 	# ASSUME: all files end in .html
+
 	for file in files:
 		print([f[:-5] for f in files])
 		row = {}
@@ -76,12 +77,9 @@ def main():
 		row[_HEADERS[1]] = userIDmap # players on team
 		row[_HEADERS[2]] = optins # optins for team
 		toWrite.append(row)
+	
 	writeCSV(toWrite)
 
 
 
 
-
-
-
-main()

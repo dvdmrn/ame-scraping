@@ -1,6 +1,5 @@
 import sys
 import requests
-from bs4 import BeautifulSoup
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
@@ -19,26 +18,16 @@ chrome_options.add_argument('--disable-gpu')
 OUTPUT_FOLDER = "scraped-teams" # name of output folder
 
 
-# min/max values of user pages to scrape. Min is inclusive and max is exclusive. So if your range was [0-4) it would provide values 0,1,2,3,4
-_MIN_INDEX = 226 # inclusive
-_MAX_INDEX = 243 # exclusive
-
-_LOGIN_URL = os.environ["AME_LOGIN"] # access an environment variable with login credentials 
-
 driver = webdriver.Chrome(chrome_options=chrome_options)
 
-print("logging in...")
-driver.get(_LOGIN_URL)
-print("initializing...\n========================")
 
+def crawl_pages(pages,settings):
 
-def crawl_pages(pages):
-
-	for i in range(_MIN_INDEX,_MAX_INDEX): 
+	for i in range(settings["teams"]["min_team_ID"],settings["teams"]["max_team_ID"]): 
 		
 		try: 
 			url = "https://play.apocalypsemadeeasy.com/admin/teams/"+str(i)+"/show"
-			print("~~~~~~~~~\n    accessing: ",url)
+			print("...........................................................\n    accessing: ",url)
 			driver.get(url)
 			content = WebDriverWait(driver, 10).until(EC.visibility_of_element_located((
 					By.XPATH, 
@@ -56,19 +45,22 @@ def crawl_pages(pages):
 
 def write_pages(toWrite):
 	# generates .html files from page contents
+	print("✏️    writing contents to",OUTPUT_FOLDER)
+
 	for p in toWrite:
 		file = open(OUTPUT_FOLDER+"/"+p+".html","w")
 		file.write(toWrite[p])
 		file.close()
 
-def main():
+def main(settings):
+
+	print("===========================================================",
+		"\n🔥 accessing team data 🔥")
+	print("logging in...")
+	driver.get(settings["login"])
+	print("initializing...")
+
 	pages = {}
-	crawl_pages(pages)
+	crawl_pages(pages,settings)
 	write_pages(pages)
-
-main()
-
-# response = requests.get(my_url)
-# soup = BeautifulSoup(response.text)
-# soup.find(id="intro-text")
 

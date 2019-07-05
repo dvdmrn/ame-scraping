@@ -16,29 +16,17 @@ chrome_options.add_argument('--disable-gpu')
 
 OUTPUT_FOLDER = "scraped-profiles" # name of output folder
 
-
-
-
-
-# min/max values of user pages to scrape. Min is inclusive and max is exclusive. So if your range was [0-4) it would provide values 0,1,2,3,4
-_MIN_INDEX = 522 # inclusive
-_MAX_INDEX = 569 # exclusive
-_LOGIN_URL = os.environ["AME_LOGIN"] # access an environ. variable for credentials
-
 driver = webdriver.Chrome(chrome_options=chrome_options)
 
-print("logging in...")
-driver.get(_LOGIN_URL)
-print("initializing...\n========================")
 
 
-def crawl_pages(pages):
+def crawl_pages(pages,settings):
 
-	for i in range(_MIN_INDEX,_MAX_INDEX): 
+	for i in range(settings["profiles"]["min_profile_ID"],settings["profiles"]["max_profile_ID"]): 
 		
 		try: 
 			url = "https://play.apocalypsemadeeasy.com/admin/users/"+str(i)+"/show"
-			print("~~~~~~~~~\n    accessing: ",url)
+			print("...........................................................\n    accessing: ",url)
 			driver.get(url)
 			content = WebDriverWait(driver, 10).until(EC.visibility_of_element_located((
 					By.XPATH, 
@@ -55,17 +43,24 @@ def crawl_pages(pages):
 
 
 def write_pages(toWrite):
+
+	print("✏️    writing contents to",OUTPUT_FOLDER)
 	# generates .html files from page contents
 	for p in toWrite:
 		file = open(OUTPUT_FOLDER+"/"+p+".html","w")
 		file.write(toWrite[p])
 		file.close()
 
-def main():
+def main(settings):
+	print("===========================================================",
+		"\n👤 accessing profiles 👤")
+	print("🔑 logging in with url: ",settings["login"])
+	driver.get(settings["login"])
+	print("initializing...")
+
 	pages = {}
-	crawl_pages(pages)
+	crawl_pages(pages,settings)
 	write_pages(pages)
 
-main()
 
 
