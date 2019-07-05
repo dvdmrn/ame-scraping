@@ -6,7 +6,7 @@ import csv
 
 
 _RAW_PATH = "scraped-teams"
-_HEADERS = ["TeamID","players","opt-in"]
+_HEADERS = ["TeamID","players","opt-in","name"]
 
 
 
@@ -55,6 +55,14 @@ def writeCSV(toWrite):
 		writer.writerows(toWrite)
 	print("complete!")
 
+def getTeamName(soup):
+	labels = soup.findAll('label')
+	name = ""
+	for l in labels:
+		if "Name" in l.text:
+			name = l.parent.findNext("div").findNext("span").text
+			return name
+
 def main():
 
 	toWrite = []
@@ -63,7 +71,7 @@ def main():
 	# ASSUME: all files end in .html
 
 	for file in files:
-		print([f[:-5] for f in files])
+		# print([f[:-5] for f in files])
 		row = {}
 		teamID = file[:-5]
 		file = open(_RAW_PATH+"/"+file,"r")
@@ -72,7 +80,10 @@ def main():
 		userIDmap = findUserIDs(soup) # dict
 		optinNames = findOptinNames(soup) # list
 		optins = getOptinIDs(optinNames, userIDmap) # list
+		teamName = getTeamName(soup)
+		print("NAME: ",teamName)
 		row[_HEADERS[0]] = teamID # team id
+		row[_HEADERS[3]] = teamName # team name
 		row[_HEADERS[1]] = userIDmap # players on team
 		row[_HEADERS[2]] = optins # optins for team
 		toWrite.append(row)
@@ -82,3 +93,4 @@ def main():
 
 
 
+main()

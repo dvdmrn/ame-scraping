@@ -1,6 +1,6 @@
 
 { 
-	"login":"YOUR_LOGIN_URL_HERE", 
+	"login":"https://play.apocalypsemadeeasy.com/auth/login/f2777976-e309-4da5-8bc1-797f060d277f", 
 	"profiles":{
 		"min_profile_ID":522,
 		"max_profile_ID":569
