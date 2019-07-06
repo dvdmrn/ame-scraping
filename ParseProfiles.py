@@ -62,4 +62,3 @@ def writeCSV():
 def main():
 	makeList()
 	writeCSV()
-

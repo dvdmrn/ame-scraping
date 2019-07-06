@@ -1,8 +1,13 @@
 # ame-scraping
 
-## how to use: 
+## How to use
+
+### Creating the comprehensive Users and Teams sheets: 
 1. edit settings.json with the parameters of the pages you want to scrape
 2. run by calling `python main.py()`
+
+### Creating the Games sheet:
+1. Ensure you have created full Users and Teams sheets from the previous step
 
 ### script flow
 

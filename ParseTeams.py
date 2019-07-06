@@ -89,8 +89,3 @@ def main():
 		toWrite.append(row)
 	
 	writeCSV(toWrite)
-
-
-
-
-main()

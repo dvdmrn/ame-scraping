@@ -1,12 +1,12 @@
 
 { 
-	"login":"https://play.apocalypsemadeeasy.com/auth/login/f2777976-e309-4da5-8bc1-797f060d277f", 
+	"login":"YOUR_LOGIN_HERE", 
 	"profiles":{
-		"min_profile_ID":522,
-		"max_profile_ID":569
+		"min_profile_ID":140,
+		"max_profile_ID":715
 	},
 	"teams":{
 		"min_team_ID":70,
-		"max_team_ID":309
+		"max_team_ID":316
 	}
 } 

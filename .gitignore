@@ -6,3 +6,5 @@ login/*
 *.txt
 Secrets/*
 __pycache__/*
+.~*lock*
+TODO
