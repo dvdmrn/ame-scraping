@@ -6,8 +6,7 @@ import csv
 
 
 _RAW_PATH = "scraped-teams"
-_HEADERS = ["TeamID","players","opt-in","name"]
-
+_HEADERS = ["TeamID","players","opt-in","name","FDBK 1","CLSN 1","FDBK 2","CLSN 2","FDBK 3","CLSN 3","FDBK 4","CLSN 4","FDBK 5","CLSN 5","PTS"]
 
 
 def findUserIDs(soup):
@@ -36,6 +35,8 @@ def findOptinNames(soup):
 	print("optins:", optinNames)
 	return optinNames
 
+
+
 def getOptinIDs(names,nmap):
 	# gets IDs of ppl who've opted in
 	# returns: list
@@ -47,10 +48,10 @@ def getOptinIDs(names,nmap):
 	print("IDs of optins: ",optinIDs)
 	return optinIDs
 
-def writeCSV(toWrite):
-	print("\n\n✏️ writing to team_data.csv...\n\n")
-	with open("team_data.csv","w",newline='') as csvFile:
-		writer = csv.DictWriter(csvFile, fieldnames=_HEADERS)
+def writeCSV(toWrite,name,headers):
+	print("\n\n✏️ writing to"+name+"...\n\n")
+	with open(name,"w",newline='') as csvFile:
+		writer = csv.DictWriter(csvFile, fieldnames=headers)
 		writer.writeheader()
 		writer.writerows(toWrite)
 	print("complete!")
@@ -63,12 +64,37 @@ def getTeamName(soup):
 			name = l.parent.findNext("div").findNext("span").text
 			return name
 
+def getFdbk(soup,feedback):
+	labels = soup.findAll('label')
+	for l in labels:
+		if "scenario-feedback" in l.text:
+			feedbackScore = l.parent.findNext("div").findNext("span").text
+			feedback["SCNR"].append(feedbackScore)
+		if "closeness-feedback" in l.text:
+			feedbackScore = l.parent.findNext("div").findNext("span").text
+			feedback["CLSN"].append(feedbackScore)
+
+def sortFeedbackScores(scores):
+	output = []
+	for i in range(0,max(len(scores["SCNR"]),len(scores["CLSN"]))):
+		try:
+			output.append({"SCNR":scores["SCNR"][i],"CLSN":scores["CLSN"][i]})
+		except:
+			if i > (len(scores["SCNR"])-1):
+				output.append({"SCNR":"","CLSN":scores["CLSN"][i]})
+			elif i > (len(scores["CLSN"])-1):
+				output.append({"SCNR":scores["SCNR"][i],"CLSN":""})
+
+	return output
+
 def main():
 
 	toWrite = []
+	fdbk = {"SCNR":[],"CLSN":[]}
 	
 	files = [f for f in listdir(_RAW_PATH) if isfile(join(_RAW_PATH, f))]
 	# ASSUME: all files end in .html
+
 
 	for file in files:
 		# print([f[:-5] for f in files])
@@ -81,6 +107,7 @@ def main():
 		optinNames = findOptinNames(soup) # list
 		optins = getOptinIDs(optinNames, userIDmap) # list
 		teamName = getTeamName(soup)
+		feedbackScores = getFdbk(soup,fdbk)
 		print("NAME: ",teamName)
 		row[_HEADERS[0]] = teamID # team id
 		row[_HEADERS[3]] = teamName # team name
@@ -88,4 +115,6 @@ def main():
 		row[_HEADERS[2]] = optins # optins for team
 		toWrite.append(row)
 	
-	writeCSV(toWrite)
+	writeFeedbackScores = sortFeedbackScores(fdbk) # reformats so that scores are writable
+	writeCSV(toWrite,"team_data.csv",_HEADERS)
+	writeCSV(writeFeedbackScores,"feedback_scores.csv",["SCNR","CLSN"])
