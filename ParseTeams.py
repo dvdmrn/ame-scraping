@@ -6,7 +6,7 @@ import csv
 
 
 _RAW_PATH = "scraped-teams"
-_HEADERS = ["TeamID","players","opt-in","name","FDBK 1","CLSN 1","FDBK 2","CLSN 2","FDBK 3","CLSN 3","FDBK 4","CLSN 4","FDBK 5","CLSN 5","PTS"]
+_HEADERS = ["TeamID","players","opt-in","name"]
 
 
 def findUserIDs(soup):
