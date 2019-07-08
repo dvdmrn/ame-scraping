@@ -42,5 +42,3 @@ ProcessGames.py -> generates game_data.csv
 
 CreateUserSheets.py -> generates active_users.csv, comprehensive_user_data.csv
 ```
-
-I'll make this readme better if someone other than myself ever uses these scripts. Until next time ~* 
