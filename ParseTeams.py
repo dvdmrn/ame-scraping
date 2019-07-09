@@ -8,19 +8,25 @@ import csv
 _RAW_PATH = "scraped-teams"
 _HEADERS = ["TeamID","players","opt-in","name"]
 
+noIDfound = []
 
-def findUserIDs(soup):
+def findUserIDs(soup,file):
+	global noIDfound
 	userIDmap = {}
 	# find userIDs
 	# returns: dict
-	for row in soup.findAll('table')[0].findAll('tr'):
-		spans = row.findAll('span')
-		try:
-			int(spans[0].text)
-			userIDmap[spans[1].text] = spans[0].text
-		except:
-			pass
-	print("users & id:",userIDmap)
+	try:
+		for row in soup.findAll('table')[0].findAll('tr'):
+			spans = row.findAll('span')
+			try:
+				int(spans[0].text)
+				userIDmap[spans[1].text] = spans[0].text
+			except:
+				pass
+	except:
+		print("!!! NO USER IDs FOUND")
+		noIDfound.append(file.name)
+	# print("users & id:",userIDmap)
 	return userIDmap
 
 def findOptinNames(soup):
@@ -32,7 +38,7 @@ def findOptinNames(soup):
 		if "optin-" in l.text:
 			optinNames.append(l.parent.findNext("span").findNext("span").text)
 
-	print("optins:", optinNames)
+	# print("optins:", optinNames)
 	return optinNames
 
 
@@ -45,7 +51,7 @@ def getOptinIDs(names,nmap):
 		if name in nmap:
 			optinIDs.append(nmap[name])
 
-	print("IDs of optins: ",optinIDs)
+	# print("IDs of optins: ",optinIDs)
 	return optinIDs
 
 def writeCSV(toWrite,name,headers):
@@ -88,7 +94,7 @@ def sortFeedbackScores(scores):
 	return output
 
 def main():
-
+	global noIDfound
 	toWrite = []
 	fdbk = {"SCNR":[],"CLSN":[]}
 	
@@ -98,12 +104,13 @@ def main():
 
 	for file in files:
 		# print([f[:-5] for f in files])
+		print("accessing: "+file)
 		row = {}
 		teamID = file[:-5]
 		file = open(_RAW_PATH+"/"+file,"r")
 		soupme = file.read()
 		soup = BeautifulSoup(soupme, "lxml")
-		userIDmap = findUserIDs(soup) # dict
+		userIDmap = findUserIDs(soup,file) # dict
 		optinNames = findOptinNames(soup) # list
 		optins = getOptinIDs(optinNames, userIDmap) # list
 		teamName = getTeamName(soup)
@@ -115,6 +122,8 @@ def main():
 		row[_HEADERS[2]] = optins # optins for team
 		toWrite.append(row)
 	
+	if(noIDfound):
+		print("\n\n\n *~ ! ~* \nMISSING IDs FOR FOLLOWING: ",noIDfound,"\n\n\n")
 	writeFeedbackScores = sortFeedbackScores(fdbk) # reformats so that scores are writable
 	writeCSV(toWrite,"team_data.csv",_HEADERS)
 	writeCSV(writeFeedbackScores,"feedback_scores.csv",["SCNR","CLSN"])

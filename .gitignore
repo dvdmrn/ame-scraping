@@ -8,3 +8,5 @@ Secrets/*
 __pycache__/*
 .~*lock*
 TODO
+.Rproj.user
+*.Rproj*
