@@ -6,6 +6,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import time
 import os
+import helpers
 
 chrome_options = webdriver.ChromeOptions()
 chrome_options.add_argument('--no-sandbox')
@@ -51,6 +52,7 @@ def write_pages(toWrite):
 		file.write(toWrite[p])
 		file.close()
 
+
 def main(settings):
 	print("===========================================================",
 		"\n👤 accessing profiles 👤")
@@ -61,6 +63,7 @@ def main(settings):
 	pages = {}
 	crawl_pages(pages,settings)
 	write_pages(pages)
+	helpers.linearScanMissingFiles(settings["profiles"]["min_profile_ID"],settings["profiles"]["max_profile_ID"],"scraped-profiles")
 
 
 

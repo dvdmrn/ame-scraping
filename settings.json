@@ -2,11 +2,11 @@
 { 
 	"login":"YOUR_LOGIN_HERE", 
 	"profiles":{
-		"min_profile_ID":715,
-		"max_profile_ID":741 
+		"min_profile_ID":741,
+		"max_profile_ID":756 
 	},
 	"teams":{
-		"min_team_ID":316,
-		"max_team_ID":329
+		"min_team_ID":329,
+		"max_team_ID":340
 	}
 } 

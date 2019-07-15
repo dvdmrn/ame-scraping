@@ -6,6 +6,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import time
 import os
+import helpers
 
 
 chrome_options = webdriver.ChromeOptions()
@@ -63,4 +64,6 @@ def main(settings):
 	pages = {}
 	crawl_pages(pages,settings)
 	write_pages(pages)
+	helpers.linearScanMissingFiles(settings["profiles"]["min_profile_ID"],settings["profiles"]["max_profile_ID"],"scraped-profiles")
+
 
