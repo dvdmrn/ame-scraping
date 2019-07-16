@@ -1,6 +1,6 @@
 
 { 
-	"login":"YOUR_LOGIN_HERE", 
+	"login":"", 
 	"profiles":{
 		"min_profile_ID":741,
 		"max_profile_ID":756 

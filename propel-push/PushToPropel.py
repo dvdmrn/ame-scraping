@@ -10,6 +10,9 @@ import os
 from tqdm import tqdm
 import json
 
+sys.path.insert(0, '../')
+import helpers
+
 chrome_options = webdriver.ChromeOptions()
 chrome_options.add_argument('--no-sandbox')
 chrome_options.add_argument('--window-size=1420,1080')
@@ -68,11 +71,15 @@ def login(driver,loginInfo):
 def addSubject(driver, fname, lname, email, age, gender):
 
 	print("adding subject:",fname,lname,"...")
-	addSubj = driver.find_element_by_xpath('//*[@title="Add"]')
-	addSubj.click()
-	time.sleep(1)
+	addSubj = WebDriverWait(driver, 20).until(
+		EC.element_to_be_clickable((By.XPATH, "//*[@title='Add']")))
 
-	firstName = driver.find_element_by_id("firstname")
+	# driver.find_element_by_xpath('//*[@title="Add"]')
+	addSubj.click()
+	# time.sleep(1)
+
+	firstName = WebDriverWait(driver, 20).until(
+		EC.element_to_be_clickable((By.ID, "firstname")))
 	lastName = driver.find_element_by_id("lastname")
 	emailField = driver.find_element_by_id("email")
 	ageSelector = Select(driver.find_element_by_id("age"))
@@ -93,7 +100,7 @@ def ageToBucket(age):
 		int(age)
 	except:
 		return ""
-
+	age = int(age)
 	buckets = ["0-4","5-14","15-24","25-34","35-44","45-54","55-64","65+"]
 	if(0 <= age <= 4):
 		return buckets[0]
@@ -125,6 +132,25 @@ def genderToBucket(gender):
 	else:
 		return ""
 
+def sliceNames(name):
+	firstLast = name.split(" ")
+	print(firstLast)
+	try:
+		return [firstLast[0]," ".join(firstLast[1:])]
+	except:
+		return [firstLast[0],""]
+
+
+def addMultipleSubjects(driver):
+	users = helpers.openCSVdict("../active_users.csv")
+	print("adding multiple subjects...")
+	for user in tqdm(users):
+		if user["OPT IN?"] == "n":
+			name = sliceNames(user["NAME"])
+			addSubject(driver,name[0],name[1],user["EMAIL"],user["AGE"],user["GENDER"])
+			time.sleep(0.5)
+
+
 def main():	
 	print("in main!")
 	loginURL = "https://propelsurveysolutions.ca/"
@@ -134,7 +160,8 @@ def main():
 	login(driver,loginInfo)
 
 	driver.get("https://propelsurveysolutions.ca/projectLead/project/43/participants/")
-	addSubject(driver,"Testy","McTestFace","test@testMeUp.com","as","o")
+	addMultipleSubjects(driver)
 
 
 main()
+

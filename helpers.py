@@ -1,6 +1,13 @@
 import csv
 import os
 
+def openCSVdict(path):
+	with open(path, newline='') as csv_file:
+		dictReader = csv.DictReader(csv_file)
+		dicts = list(dictReader)
+		return dicts
+
+
 def writeCSV(toWrite,filename,headers):
 	print("\n\n✏️ writing to"+filename+"...\n\n")
 	with open(filename,"w",newline='') as csvFile:
