@@ -1,6 +1,6 @@
 import csv
 import pprint as pp
-
+from tqdm import tqdm
 
 def main():
 
@@ -37,7 +37,8 @@ def main():
 
 def createStandardSheet(users,userXteam,headers):
 	stdSheet = []
-	for user in users:
+	print("creating comprehensive user sheet...")
+	for user in tqdm(users):
 		entry = {}
 		for uXt in userXteam:
 			if user["Id"] == uXt["UserID"]:
@@ -54,7 +55,6 @@ def createStandardSheet(users,userXteam,headers):
 				stdSheet.append(entry)
 
 
-	pp.pprint(stdSheet)
 	return stdSheet
 
 def writeCSV(toWrite,filename,headers):
@@ -67,12 +67,12 @@ def writeCSV(toWrite,filename,headers):
 
 def activeUsersOnly(ss,games,headers):
 	activeUsers = []
-	for user in ss:
+	print("findinga active users...")
+	for user in tqdm(ss):
 		for game in games:
 			if user["TEAM ID"]==game["TEAM ID"]:
 				activeUsers.append(user)
 				break
-	pp.pprint(activeUsers)
 	return activeUsers
 
 

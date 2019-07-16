@@ -61,5 +61,8 @@ def writeCSV(toWrite):
 		writer.writerows(toWrite)
 	print("complete!")
 
-
+# def ignoreMelbourne(games):
+# 	for i in range(0,len(games)):
+# 		if (games[i]["scenario_id"] == "10"):
+# 			del
 main()

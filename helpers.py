@@ -31,3 +31,4 @@ def linearScanMissingFiles(minR,maxR,path):
 
 	with open("missing-"+path+".txt",'w') as file:
 		file.write(str(lostUsers))
+linearScanMissingFiles()

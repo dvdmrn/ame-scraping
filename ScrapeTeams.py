@@ -7,7 +7,7 @@ from selenium.webdriver.support import expected_conditions as EC
 import time
 import os
 import helpers
-
+import tqdm
 
 chrome_options = webdriver.ChromeOptions()
 chrome_options.add_argument('--no-sandbox')
@@ -48,10 +48,12 @@ def write_pages(toWrite):
 	# generates .html files from page contents
 	print("✏️    writing contents to",OUTPUT_FOLDER)
 
-	for p in toWrite:
+	for p in tqdm(toWrite):
 		file = open(OUTPUT_FOLDER+"/"+p+".html","w")
 		file.write(toWrite[p])
 		file.close()
+		time.sleep(0.02)
+	time.sleep(1)
 
 def main(settings):
 
@@ -64,6 +66,6 @@ def main(settings):
 	pages = {}
 	crawl_pages(pages,settings)
 	write_pages(pages)
-	helpers.linearScanMissingFiles(settings["profiles"]["min_profile_ID"],settings["profiles"]["max_profile_ID"],"scraped-profiles")
+	helpers.linearScanMissingFiles(settings["teams"]["min_team_ID"],settings["teams"]["max_team_ID"],"scraped-teams")
 
 

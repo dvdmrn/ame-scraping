@@ -7,6 +7,7 @@ from selenium.webdriver.support import expected_conditions as EC
 import time
 import os
 import helpers
+from tqdm import tqdm
 
 chrome_options = webdriver.ChromeOptions()
 chrome_options.add_argument('--no-sandbox')
@@ -47,10 +48,12 @@ def write_pages(toWrite):
 
 	print("✏️    writing contents to",OUTPUT_FOLDER)
 	# generates .html files from page contents
-	for p in toWrite:
+	for p in tqdm(toWrite):
 		file = open(OUTPUT_FOLDER+"/"+p+".html","w")
 		file.write(toWrite[p])
 		file.close()
+		time.sleep(0.01)
+	time.sleep(1) # sleeps are there because I think not all the files load before ScrapeTeams.py gets to them
 
 
 def main(settings):
