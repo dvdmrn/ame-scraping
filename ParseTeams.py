@@ -3,7 +3,7 @@ from bs4 import BeautifulSoup
 from os import listdir
 from os.path import isfile, join
 import csv
-
+import tqdm
 
 _RAW_PATH = "scraped-teams"
 _HEADERS = ["TeamID","players","opt-in","name"]
@@ -24,7 +24,6 @@ def findUserIDs(soup,file):
 			except:
 				pass
 	except:
-		print("!!! NO USER IDs FOUND")
 		noIDfound.append(file.name)
 	# print("users & id:",userIDmap)
 	return userIDmap
@@ -102,9 +101,9 @@ def main():
 	# ASSUME: all files end in .html
 
 
-	for file in files:
+	for file in tqdm.tqdm(files):
 		# print([f[:-5] for f in files])
-		print("accessing: "+file)
+		# print("accessing: "+file)
 		row = {}
 		teamID = file[:-5]
 		file = open(_RAW_PATH+"/"+file,"r")
@@ -115,7 +114,6 @@ def main():
 		optins = getOptinIDs(optinNames, userIDmap) # list
 		teamName = getTeamName(soup)
 		feedbackScores = getFdbk(soup,fdbk)
-		print("NAME: ",teamName)
 		row[_HEADERS[0]] = teamID # team id
 		row[_HEADERS[3]] = teamName # team name
 		row[_HEADERS[1]] = userIDmap # players on team
@@ -123,7 +121,7 @@ def main():
 		toWrite.append(row)
 	
 	if(noIDfound):
-		print("\n\n\n *~ ! ~* \nMISSING IDs FOR FOLLOWING: ",noIDfound,"\n\n\n")
+		print("\n\n\n⚠️ ⚠️ ⚠️\nWARNING:\n🤔 I CANNOT FIND USER IDs IN THE FOLLOWING FILES: ",noIDfound,"\n\n\n")
 	writeFeedbackScores = sortFeedbackScores(fdbk) # reformats so that scores are writable
 	writeCSV(toWrite,"team_data.csv",_HEADERS)
 	writeCSV(writeFeedbackScores,"feedback_scores.csv",["SCNR","CLSN"])

@@ -5,6 +5,7 @@ import ScrapeProfiles
 import ScrapeTeams
 import ParseProfiles, ParseTeams
 import PlayerTeamMatching
+from time import sleep
 
 def setup_directories():
 	if not os.path.isdir("./scraped-profiles"):
@@ -39,10 +40,12 @@ def main():
 
 	# get profile data and make csv
 	ScrapeProfiles.main(settings)
+	sleep(3);
 	ParseProfiles.main()
 
 	# get team data and make csv
 	ScrapeTeams.main(settings)
+	sleep(3);
 	ParseTeams.main()
 
 	# cross ref player x team data and make csv	

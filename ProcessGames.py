@@ -27,7 +27,7 @@ def main():
 	    games = list(gameReader)
 
 	for g in games:
-		if not (g['time_taken'] == ''): # if elapsed time
+		if not (g['time_taken'] == '') and not (g['scenario_id'] == '10'): # if elapsed time
 			game = {}
 			game["GAME ID"]=g['id']
 			game["DATE"]=g['finished'][:10]

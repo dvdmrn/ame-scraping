@@ -3,7 +3,7 @@ from bs4 import BeautifulSoup
 from os import listdir
 from os.path import isfile, join
 import csv
-
+import tqdm
 
 
 _RAW_PATH = "scraped-profiles"
@@ -24,7 +24,8 @@ headers = [
 toWrite = []
 
 def makeList():
-	for f in files:
+	print("reading profile data...")
+	for f in tqdm.tqdm(files):
 		file = open(_RAW_PATH+"/"+f,"r")
 		soupme = file.read()
 		soup = BeautifulSoup(soupme, "lxml")
@@ -36,7 +37,7 @@ def makeList():
 				for header in headers:
 					# print("comapring: ",spans[i].text, header)
 					if spans[i].text == header:
-						print("successful comparison: ",spans[i].text, header)
+						# print("successful comparison: ",spans[i].text, header)
 						row[header] = spans[i+1].text
 
 
@@ -47,7 +48,7 @@ def makeList():
 			if("@" in a.text):
 				row["Email"] = a.text
 
-		print (row)
+		# print (row)
 		toWrite.append(row)
 		file.close()
 

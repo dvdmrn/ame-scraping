@@ -1,5 +1,6 @@
 import csv
 import os
+from selenium import webdriver
 
 def openCSVdict(path):
 	with open(path, newline='') as csv_file:
@@ -9,9 +10,9 @@ def openCSVdict(path):
 
 
 def writeCSV(toWrite,filename,headers):
-	print("\n\n✏️ writing to"+filename+"...\n\n")
+	print("\n\n✏️ writing to: "+filename+"...\n\n")
 	with open(filename,"w",newline='') as csvFile:
-		writer = csv.DictWriter(csvFile, fieldnames=headers)
+		writer = csv.DictWriter(csvFile, fieldnames=headers, extrasaction='ignore')
 		writer.writeheader()
 		writer.writerows(toWrite)
 	print("complete!")
@@ -31,4 +32,8 @@ def linearScanMissingFiles(minR,maxR,path):
 
 	with open("missing-"+path+".txt",'w') as file:
 		file.write(str(lostUsers))
-linearScanMissingFiles()
+
+def verifyLogin(webpage):
+	if "Invalid Login Link" in webpage:
+		print("😢 invalid login link. Did it expire?")
+		exit()

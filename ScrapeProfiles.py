@@ -23,23 +23,23 @@ driver = webdriver.Chrome(chrome_options=chrome_options)
 
 
 def crawl_pages(pages,settings):
-
-	for i in range(settings["profiles"]["min_profile_ID"],settings["profiles"]["max_profile_ID"]): 
+	print("crawling profiles...")
+	for i in tqdm(range(settings["profiles"]["min_profile_ID"],settings["profiles"]["max_profile_ID"])): 
 		
 		try: 
 			url = "https://play.apocalypsemadeeasy.com/admin/users/"+str(i)+"/show"
-			print("...........................................................\n    accessing: ",url)
+			# print("...........................................................\n    accessing: ",url)
 			driver.get(url)
 			content = WebDriverWait(driver, 10).until(EC.visibility_of_element_located((
 					By.XPATH, 
 					"//*[contains(text(), 'in Tech')]"
 					)))
 			body = driver.find_element_by_tag_name("body")
-			print(body.get_attribute("innerHTML"))
+			# print(body.get_attribute("innerHTML"))
 			pages[str(i)] = body.get_attribute("innerHTML")
 
 		except:
-			print("null page")
+			print("null page: ",url)
 
 	driver.close()
 
@@ -61,6 +61,10 @@ def main(settings):
 		"\n👤 accessing profiles 👤")
 	print("🔑 logging in with url: ",settings["login"])
 	driver.get(settings["login"])
+
+	body = driver.find_element_by_tag_name("body")
+	helpers.verifyLogin(body.get_attribute("innerHTML"))
+
 	print("initializing...")
 
 	pages = {}

@@ -1,7 +1,8 @@
 import csv
+import tqdm
 
 def main():
-	print("cross ref. users and teams...")
+	print("====================================\nLinking users to teams!")
 	_HEADERS = [
 				"UserID",
 				"TeamID",
@@ -14,7 +15,7 @@ def main():
 		team_reader = csv.DictReader(team_csv)
 		user_reader = csv.DictReader(user_csv)
 		team_data = list(team_reader) # so we can iterate >1x
-		for user in user_reader:
+		for user in tqdm.tqdm(list(user_reader)):
 			row = {}
 			row["UserID"] = user["Id"]
 			row["TeamID"] = ""
@@ -22,10 +23,10 @@ def main():
 
 			for team in team_data:
 				if user["Id"] in team["players"]:
-					print("Found match of ",user["Id"],"in",team["players"])
+					# print("Found match of ",user["Id"],"in",team["players"])
 					row["TeamID"] = team["TeamID"]
 					if user["Id"] in team["opt-in"]:
-						print("And: ",user["Id"],"opted in!")
+						# print("And: ",user["Id"],"opted in!")
 						row["optin"] = "y"
 					else:
 						row["optin"] = "n"
