@@ -38,15 +38,21 @@ def main():
 	settings = get_settings()
 	print("🔥 accessing with login credentials:",settings["login"])
 
-	# get profile data and make csv
+	# get profile & team data
 	ScrapeProfiles.main(settings)
 	sleep(3);
-	ParseProfiles.main()
-
-	# get team data and make csv
 	ScrapeTeams.main(settings)
+	print("Webscraping complete!")
 	sleep(3);
+
+	# write profile & team data
+	print("writing data...")
+	ParseProfiles.main()
+	print("awaiting team data assets...")
+	sleep(5);
 	ParseTeams.main()
+	print("awaiting .csv...")
+	sleep(5);
 
 	# cross ref player x team data and make csv	
 	PlayerTeamMatching.main()
